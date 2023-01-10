@@ -1,0 +1,9 @@
+.vscode
+*.pdf
+*.code-workspace
+*.out
+*.o
+*.a
+test.c
+debug.h
+minishell

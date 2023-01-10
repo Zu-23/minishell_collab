@@ -1,0 +1,37 @@
+/* -------------------------------------------------------
+   The grammar symbols
+   ------------------------------------------------------- */
+
+%token  WORD
+%token  NEWLINE
+
+%token  DLESS  DGREAT  LESS  GREAT
+/*      '<<'   '>>'    '<'     '>'   */
+
+/* -------------------------------------------------------
+   The Grammar
+   ------------------------------------------------------- */
+
+%start  <commandline>
+%%
+<commandline>		::=	<pipeline> NEWLINE
+					 |	NEWLINE
+
+<pipeline>			::=	<command>
+        			 |	<pipeline> "|" <command>
+
+<command>			::=	<word_list>
+					 |	<redirection_list>
+					 |	<command> <word_list>
+					 |	<command> <redirection_list>
+
+<redirection_list>	::= <redirection>
+					 |  <redirection_list> <redirection>
+
+<redirection> 		::=	DLESS WORD
+				  	 |	DGREAT WORD
+				  	 |	LESS WORD
+				  	 |	GREAT WORD
+
+<word_list>			::=	WORD
+					 |	<word_list> WORD

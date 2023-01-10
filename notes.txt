@@ -1,0 +1,34 @@
+ 
+/* If we can't create any children, try to reap some dead ones. */
+waitchld (-1, 0);
+
+errno = EAGAIN;		/* restore errno */
+sys_error ("fork: retry");
+
+You should never call the exit function.
+exit (without the underscore) performs cleanup actions, 
+including messing with open stdio files, 
+that shouldn’t happen in child processes (they should only happen in the parent shell). 
+If you call exit instead of _exit from child processes, you may see weird behavior where, 
+for example, the parent shell re-executes parts of a command file.
+
+/* Always return the exit status of the last command to our parent. */
+
+Output Buffering (errors)
+
+Ctrl-C & Ctrl-D while reading heredoc
+
+print "exit" at exiting
+
+set_shell_name ? (minishell.c)
+
+cat |newlinecat is valid
+
+;; command not found
+
+> : syntax error near unexpected token `newline'
+
+cat | dfds ???
+
+/* Make sure that the pipes are closed in the parent. */
+close_pipes (pipe_in, pipe_out);
