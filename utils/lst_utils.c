@@ -10,13 +10,13 @@ t_types	check_type(char *str)
 		if (str[i] == '|')
 			return (PIPE);
 		else if (str[i] == '<')
-			return (REDIR_IN);
+			return (LESS);
 		else if (str[i] == '>')
-			return (REDIR_OUT);
+			return (GREAT);
 		else if (str[i] == '>' && str[i + 1] == '>')
-			return (HERE_DOC);
+			return (DGREAT);
 		else if (str[i] == '<' && str[i + 1] == '<')
-			return (REDIR_DOC);
+			return (DLESS);
 		else if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
 			return (W_SPACE);
 		else if (str[i] == '$')

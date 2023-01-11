@@ -83,26 +83,17 @@ int main(int ac, char **av, char **env)
 			ft_perror("exit");
 		if (ft_strlen(input) > 0)
 			add_history(input);
-		token = ft_strtok(input, " \'\"/$><&\\;|()");
+		token = ft_strtok(input, " \'\"$><&\\;|()");
 		while (token)
 		{
 			cmd = lexer(token, cmd);
 			free(token);
-			token = ft_strtok(NULL, " \'\"/$><&\\;|()");
+			token = ft_strtok(NULL, " \'\"$><&\\;|()");
 		}
 		cmd = lexer_analyzer(cmd);
 		//tree = asyntax(cmd);
 		cmd = lst_delete(cmd);
 	}
-		// execute(cmd, env_stock);
-	// 	t_cmd *tmp;
-	// 	tmp = cmd;
-	// 	while (tmp)
-	// 	{
-	// 		printf("command %s\n",tmp->command);
-	// 		tmp = tmp->next;
-	// 	}
-	// }
 }
 
 ///checking for syntax errors:

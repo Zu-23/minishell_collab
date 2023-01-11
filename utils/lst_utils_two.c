@@ -2,9 +2,9 @@
 t_states    return_state(int flag)
 {
 	if (flag == 1)
-		return (IN_DQ);
-	else if (flag == 2)
 		return (IN_Q);
+	else if (flag == 2)
+		return (IN_DQ);
 	else
 		return (GENERAL);
 }

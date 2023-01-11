@@ -7,24 +7,24 @@
 # include <readline/history.h> 
 typedef enum types
 {
-	WORD = -1,
-	NULL_TERM = '\0',
-	PIPE = '|',
-	W_SPACE = ' ',
-	ENV = '$',
-	REDIR_OUT = 1,
-	REDIR_IN = 2,
-	HERE_DOC = 3,
-	REDIR_DOC = 4,
-	REDIR = 5,
-	COMMAND = 6,
+	WORD,
+	NULL_TERM,
+	PIPE,
+	W_SPACE,
+	ENV,
+	GREAT,
+	LESS,
+	DLESS,
+	DGREAT,
+	REDIR_ARG,
+	COMMAND,
 }t_types;
 
 typedef enum states
 {
-	IN_DQ = '\"',
-	IN_Q = '\'',
-	GENERAL = 3,
+	IN_Q = 1,
+	IN_DQ = 2,
+	GENERAL = 3
 }t_states;
 
 // test area
