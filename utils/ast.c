@@ -94,7 +94,7 @@ char **get_argv(t_cmd *cmd)
 	return (argv);
 }
 
-t_redir *create_redir_node(t_cmd *cmd)
+t_redir *create_redir_node(t_cmd *cmd)//function that creates a node of type t_redir
 {
 	t_redir	*rdr_node;
 	t_cmd	*tmp;
@@ -107,7 +107,10 @@ t_redir *create_redir_node(t_cmd *cmd)
 	while (tmp)
 	{
 		if (tmp->type == REDIR_ARG)
+		{
 			rdr_node->opd = ft_strdup(tmp->command);
+			break ;
+		}
 		tmp = tmp->next;
 	}
 	return (rdr_node);
@@ -125,6 +128,7 @@ t_list	*create_rdr_lst_two(t_cmd *cmd)
 			n_lst = malloc(sizeof(t_list));
 			return (n_lst);
 		}
+		tmp = tmp->next;
 	}
 	return (NULL);
 }
@@ -157,6 +161,16 @@ t_cmd_b create_cmd(t_cmd *cmd)
 
 	p_c.argv = get_argv(cmd);
 	p_c.rdr_lst = create_rdr_lst(cmd);
+	//
+	t_list *tmp = p_c.rdr_lst;
+	t_redir *red;
+	while (tmp)
+	{
+		red = (t_redir *)tmp->content;
+		if (!red)
+			printf("%s\n",red->opd);
+		tmp = tmp->next;
+	}
 	return (p_c);
 }
 
