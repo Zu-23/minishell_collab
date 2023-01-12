@@ -1,27 +1,5 @@
 #include "../shell_header.h"
-// /*grammar
-// 	<cmdline>	::= <block>
-// 		| <block> (";" | "&") <cmdline>
 
-// <block>		::= <pipeline> {("&&" | "||") <pipeline>}
-
-// <pipeline>	::= <command> {"|" <command>}
-
-// <command>	::= <cmdlist>
-// 		| "(" <cmdline> ")" <redir>	(* subshell *)
-
-// <cmdlist>	::= <redir>+			(* at least one redirect - without WORDs *)
-// 		| <redir> {<arg> <redir>}+	(* at least one WORD - zero or more <redir> in any place *)
-
-// <redir>		::= {("<" | "<<" | ">" | ">>") <filename>}	(* a delimiter in case of heredoc *)
-
-// <arg>		::= token WORD | token VAR | token GROUP
-
-// <filename>	::= token WORD | token VAR | token GROUP
-// */
-// /// (aaa | (bbb | ccc))
-
-// // arr[] aaa | bbb | ccc
 static int	err(char *str)
 {
 	printf("%s", str);
@@ -35,23 +13,23 @@ typedef struct s_word
 /* Structure describing a redirection. */
 typedef struct s_redir
 {
-	int		op; //type value
+	int		op; //changed it to int cuz I had an error 
 	char	*opd;
 }	t_redir;
 
 typedef struct s_list
 {
-	t_redir			*content;
+	t_redir			*content;//changed it to t_redir cuz I had an error when trying to access it even when I casted it
 	struct s_list	*next;
 }		t_list;
-/* What a command looks like. */
-typedef struct s_cmdb
+
+typedef struct s_cmdb //changed struct name cuz it was similar to already existing struct
 {
 	char	**argv;
 	t_list	*rdr_lst;
 }	t_cmd_b;
 
-int	get_lst_size(t_cmd *cmd)
+int	get_lst_size(t_cmd *cmd)//this function counts how many commands and arguments in the t_cmd linked list *redirect,pipes not counted*
 {
 	t_cmd 	*tmp;
 	int		size;
@@ -68,7 +46,7 @@ int	get_lst_size(t_cmd *cmd)
 }
 
 
-char **get_argv(t_cmd *cmd)
+char **get_argv(t_cmd *cmd) // this functions creates 2D array that stores commands and their arguments
 {
 	int		ls_size;
 	int		i;
@@ -81,7 +59,7 @@ char **get_argv(t_cmd *cmd)
 	argv = malloc(sizeof(char *) * (ls_size + 1));
 	if (!argv)
 		err("malloc faield\n");
-	while(tmp)
+	while(tmp)//this while loop fills the 2D array with commands of type WORD
 	{
 		if (tmp->type == WORD)
 		{
@@ -106,7 +84,7 @@ t_redir *create_redir_node(t_cmd *cmd)//function that creates a node of type t_r
 	rdr_node->op = cmd->type;
 	while (tmp)
 	{
-		if (tmp->type == REDIR_ARG)
+		if (tmp->type == REDIR_ARG)// REDIR_ARG is a new token that indicates the redirects arguments
 		{
 			rdr_node->opd = ft_strdup(tmp->command);
 			break ;
@@ -115,7 +93,7 @@ t_redir *create_redir_node(t_cmd *cmd)//function that creates a node of type t_r
 	}
 	return (rdr_node);
 }
-t_list	*create_rdr_lst_two(t_cmd *cmd)
+t_list	*create_rdr_lst_two(t_cmd *cmd)//norm XD
 {
 	t_cmd	*tmp;
 	t_list	*n_lst;
@@ -133,7 +111,7 @@ t_list	*create_rdr_lst_two(t_cmd *cmd)
 	return (NULL);
 }
 
-t_list *create_rdr_lst(t_cmd *cmd)
+t_list *create_rdr_lst(t_cmd *cmd)//function that creates t_list nodes
 {
 	t_list	*rdr_lst_head;
 	t_list	*rdr_tmp;
@@ -155,23 +133,23 @@ t_list *create_rdr_lst(t_cmd *cmd)
 	return (rdr_lst_head);
 }
 
-t_cmd_b create_cmd(t_cmd *cmd)
+t_cmd_b create_cmd(t_cmd *cmd)// I removed the pipeline struct cuz t_cmd_b struct seemed sufficent to create the linked list
 {
 	t_cmd_b 	p_c;
 
-	p_c.argv = get_argv(cmd);
+	p_c.argv = get_argv(cmd);//I call the function that creates 2D array containing commands and their arguments
 	p_c.rdr_lst = create_rdr_lst(cmd);
 	//
-	t_list *tmp = p_c.rdr_lst;
-	while (tmp)
-	{
-		printf("%s\n",tmp->content->opd);
-		tmp = tmp->next;
-	}
+	// t_list *tmp = p_c.rdr_lst;
+	// while (tmp)//if you type a command and it gives segfault its just cuz printf trying to print something that doesnt exist
+	// {
+	// 	printf("%s\n",tmp->content->opd);
+	// 	tmp = tmp->next;
+	// }
 	return (p_c);
 }
 
-t_cmd *expander(t_cmd *cmd)
+t_cmd *expander(t_cmd *cmd)// here we create the linked list without spaces
 {
 	t_cmd *tmp;
 
@@ -199,17 +177,11 @@ t_cmd *expander(t_cmd *cmd)
 		else
 			tmp = tmp->next;
 	}
-	create_cmd(cmd);
-	// create_new_lst(cmd);
-	// tmp = cmd;
-	// while (tmp)
-	// {
-	// 	printf("command: %s --- state: %d\n", tmp->command, tmp->state);
-	// 	tmp = tmp->next;
-	// }
+	create_cmd(cmd);//here we call the function that creates the new linked list
 	return (cmd);
 }
 
+/*******************************************************ABSTRACT SYNTAX TREE******************************************************************************/
 // t_node *parse_pipe(t_cmd *cmd, t_node *tree)
 // {
 // 	t_node	*pip_red;
