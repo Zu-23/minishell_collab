@@ -2,9 +2,11 @@
 # define SHELL_HEADER_H
 
 # include <stdio.h>
+# include <unistd.h>
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h> 
+# include <linux/limits.h>
 typedef enum types
 {
 	WORD,

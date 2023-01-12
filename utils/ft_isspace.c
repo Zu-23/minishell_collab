@@ -4,6 +4,7 @@ int ft_isspace(char *str)
 	int	i;
 	int	flag;
 	i = 0;
+
     while (str[i])
 	{
 		if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'

@@ -140,12 +140,12 @@ t_cmd_b create_cmd(t_cmd *cmd)// I removed the pipeline struct cuz t_cmd_b struc
 	p_c.argv = get_argv(cmd);//I call the function that creates 2D array containing commands and their arguments
 	p_c.rdr_lst = create_rdr_lst(cmd);
 	//
-	// t_list *tmp = p_c.rdr_lst;
-	// while (tmp)//if you type a command and it gives segfault its just cuz printf trying to print something that doesnt exist
-	// {
-	// 	printf("%s\n",tmp->content->opd);
-	// 	tmp = tmp->next;
-	// }
+	t_list *tmp = p_c.rdr_lst;
+	while (tmp)//if you type a command and it gives segfault its just cuz printf trying to print something that doesnt exist
+	{
+		printf("redir node opd: %s\n",tmp->content->opd);
+		tmp = tmp->next;
+	}
 	return (p_c);
 }
 
