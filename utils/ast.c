@@ -32,11 +32,6 @@ typedef struct s_word
 	char	*word;
 	int		flags;
 }	t_word;
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}		t_list;
 /* Structure describing a redirection. */
 typedef struct s_redir
 {
@@ -44,6 +39,11 @@ typedef struct s_redir
 	char	*opd;
 }	t_redir;
 
+typedef struct s_list
+{
+	t_redir			*content;
+	struct s_list	*next;
+}		t_list;
 /* What a command looks like. */
 typedef struct s_cmdb
 {
@@ -146,7 +146,7 @@ t_list *create_rdr_lst(t_cmd *cmd)
 	{
 		if (tmp->type >= GREAT && tmp->type <= DGREAT)
 		{
-			rdr_tmp->content =(void*) create_redir_node(tmp);
+			rdr_tmp->content =create_redir_node(tmp);
 			rdr_tmp->next = create_rdr_lst_two(tmp->next);
 			rdr_tmp = rdr_tmp->next;
 		}
@@ -163,12 +163,9 @@ t_cmd_b create_cmd(t_cmd *cmd)
 	p_c.rdr_lst = create_rdr_lst(cmd);
 	//
 	t_list *tmp = p_c.rdr_lst;
-	t_redir *red;
 	while (tmp)
 	{
-		red = (t_redir *)tmp->content;
-		if (!red)
-			printf("%s\n",red->opd);
+		printf("%s\n",tmp->content->opd);
 		tmp = tmp->next;
 	}
 	return (p_c);
