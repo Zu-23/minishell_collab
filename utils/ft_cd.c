@@ -25,7 +25,7 @@ int	ft_cd(char **argv)
 		}
 		else
 		{
-			if (!ft_strcmp(argv[1], ".") || !ft_strcmp(argv[1], "..") && !getcwd(path, PATH_MAX))
+			if ((!ft_strcmp(argv[1], ".") || !ft_strcmp(argv[1], "..")) && !getcwd(path, PATH_MAX))
 				return (err("cd: error retrieving current directory:\
 				getcwd: cannot access parent directories: No such file or directory"));
 		}
