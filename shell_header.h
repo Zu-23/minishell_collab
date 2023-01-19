@@ -7,6 +7,7 @@
 # include <readline/readline.h>
 # include <readline/history.h> 
 # include <linux/limits.h>
+# include <signal.h>
 typedef enum types
 {
 	WORD,
@@ -43,6 +44,12 @@ typedef struct pipe_redir
 	t_node	*left;
 }t_pip_red;
 
+typedef struct environment
+{
+	char *var;
+	char *value;
+}t_env_struct;
+
 typedef union ast_val
 {
    t_cmarg		cmarg;
@@ -66,13 +73,16 @@ typedef struct cmd
 	struct cmd		*prev;
 }t_cmd;
 
-int     ft_isspace(char *str);
+void	expansion(t_cmd *cmd, t_env_struct *env);
 void	ft_perror(char *str);
+int     ft_isspace(char *str);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strtok( char *str, char *delim);
-size_t	ft_strlen(const char *str);
+char	**ft_split(char const *s, char c);
 char	*ft_strdup(const char *s1);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+size_t	ft_strlen(const char *str);
+t_cmd	*doubly_lst_delete(t_cmd *cmd);
 t_cmd	*lst_add(t_cmd *cmd, char *token);
 t_cmd 	*lst_last(t_cmd *cmd);
 t_cmd	*lst_init(t_cmd *cmd, char *token);
@@ -81,7 +91,6 @@ t_cmd	*lexer(char *token, t_cmd *cmd);
 t_cmd	*lexer_analyzer(t_cmd *cmd);
 t_cmd 	*expander(t_cmd *cmd);
 t_node 	*asyntax(t_cmd *cmd);
-char	**ft_split(char const *s, char c);
 t_states check_state(char *str);
 
 #endif

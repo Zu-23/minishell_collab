@@ -140,12 +140,12 @@ t_cmd_b create_cmd(t_cmd *cmd)// I removed the pipeline struct cuz t_cmd_b struc
 	p_c.argv = get_argv(cmd);//I call the function that creates 2D array containing commands and their arguments
 	p_c.rdr_lst = create_rdr_lst(cmd);
 	//
-	t_list *tmp = p_c.rdr_lst;
-	while (tmp)//if you type a command and it gives segfault its just cuz printf trying to print something that doesnt exist
-	{
-		printf("redir node opd: %s\n",tmp->content->opd);
-		tmp = tmp->next;
-	}
+	// t_list *tmp = p_c.rdr_lst;
+	// while (tmp)//if you type a command and it gives segfault its just cuz printf trying to print something that doesnt exist
+	// {
+	// 	printf("redir node opd: %s\n",tmp->content->opd);
+	// 	tmp = tmp->next;
+	// }
 	return (p_c);
 }
 
@@ -156,27 +156,22 @@ t_cmd *expander(t_cmd *cmd)// here we create the linked list without spaces
 	tmp = cmd;
 	while (tmp)
 	{
-		if ((!ft_strcmp(tmp->command, " ") && tmp->state == GENERAL))
+		if ((!ft_strcmp(tmp->command, " ") && tmp->state == GENERAL)
+		|| !ft_strcmp(tmp->command, "\"") || !ft_strcmp(tmp->command, "\'"))
 		{
 			if (!tmp->prev && tmp->next)
 			{
 				cmd = tmp->next;
 				tmp->next->prev = NULL;
 			}
-			else if (!tmp->next && tmp->prev)
-				tmp->prev->next = NULL;
-			else if (tmp->prev && tmp->next)
-			{
-				tmp->prev->next = tmp->next;
-				tmp->next->prev = tmp->prev;
-			}
-			free(tmp->command);
-			free(tmp);
+			else
+				doubly_lst_delte(cmd);
 			tmp = cmd;
 		}
 		else
 			tmp = tmp->next;
 	}
+	expansion(cmd);
 	create_cmd(cmd);//here we call the function that creates the new linked list
 	return (cmd);
 }

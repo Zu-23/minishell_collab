@@ -1,10 +1,5 @@
 #include "shell_header.h"
 
-typedef struct environment
-{
-	char *var;
-	char *value;
-}env_struct;
 
 t_cmd	*lexer(char *token, t_cmd *cmd)
 {
@@ -16,18 +11,18 @@ t_cmd	*lexer(char *token, t_cmd *cmd)
 	return (cmd);
 }
 
-env_struct *get_env(char **env)
+t_env_struct *get_env(char **env)
 {
 	int i;
 	int	j;
     char ***splitted_2d_env;
-    env_struct *env_var;
+    t_env_struct *env_var;
 
 	i = 0;
 	j = 0;
     while (env[i])
         i++;
-    env_var = malloc(sizeof(env_struct) * i);
+    env_var = malloc(sizeof(t_env_struct) * i);
     splitted_2d_env = malloc(sizeof(char **) * (i + 1));
     i = -1;
     while (env[i])
@@ -43,80 +38,57 @@ env_struct *get_env(char **env)
         }
         j++;
     }
+	free(splitted_2d_env);
 	return (env_var);
 }
 
-void	visit(t_node *tree)//function to print the tree recursively
+int	check_input(char *input)
 {
-	int	i = 0;
-	if (tree->node_type != PIPE)
-	{
-		printf("command: %s : ",tree->node_data.cmarg.command);
-		while(tree->node_data.cmarg.arg[i])
-			printf("arg: %s\n",tree->node_data.cmarg.arg[i++]);
-	}
-	else if (tree->node_type == PIPE)
-	{
-		printf("pipe |\n");
-		visit(tree->node_data.pipe.left);
-		visit(tree->node_data.pipe.right);
-	}
+	int	i;
+
+	i = 0;
+
+	if (!input[0] || ft_isspace(input))
+		return (1);
+	while (input[i] == '\"' || input[i] == '\'' || input[i] == ' ')
+		i++;
+	if (input[i] == '\0')
+		return (1);
+	return (0);
+
 }
+
 
 int main(int ac, char **av, char **env)
 {
 	char		*input;
 	char		*token;
 	t_cmd		*cmd;
-	//t_node		*tree;
-	// char		**env_stock;
+	char		**env_stock;
 
 	cmd = NULL;
 	(void)ac;
 	(void)av;
-	(void)env;
-	// env_stock = get_env(env);
+	env_stock = get_env(env);
 	while (1)
 	{
 		input = readline("$>");
-		if (!input || input[0] == '\0' || ft_isspace(input))
-			ft_perror("exit");
+		if (!input)
+			break ;
+		if (check_input(input))
+			continue ;
 		if (ft_strlen(input) > 0)
 			add_history(input);
-		token = ft_strtok(input, " \'\"$><&\\;|()");
+		token = ft_strtok(input, " \'\"$><&\\|");
 		while (token)
 		{
 			cmd = lexer(token, cmd);
 			free(token);
-			token = ft_strtok(NULL, " \'\"$><&\\;|()");
+			token = ft_strtok(NULL, " \'\"$><&\\|");
 		}
 		cmd = lexer_analyzer(cmd);
-		//tree = asyntax(cmd);
 		cmd = lst_delete(cmd);
 	}
+	cleaner(env_stock);
 }
 
-///checking for syntax errors:
-/* - UNEXPECTED TOKENS:
-	- `;;' (this token is always unrecognized in bash and zsh shells)
-
-* AND, OR, PIPE, FG, BG:
-	- left: [WSPACE] (STRING | CPAR)
-	- right: [WSPACE] (STRING | REDIRECT | OPAR | if <FG, BG> ENDOFCMD)
-
-* OPAR "(":
-	- left: CMDBEGIN | [WSPACE] (AND | OR | PIPE | OPAR)
-	- right: [WSPACE] (STRING | REDIRECT | OPAR)
-
-* CPAR ")":
-	- left: [WSPACE] (STRING | CPAR)
-	- right: [WSPACE] (AND | OR | PIPE | CPAR | ENDOFCMD)
-
-* REDIRECT:
-	- right: [WSPACE] STRING
-
-* PARENTHESES MATCHING AND QUOTING:
-	- inside each pair parentheses should not be an empthy command.
-	- every open parentheses has to have a matching closing parentheses.
-	- every single/double quote have to be closed.
-	*/

@@ -1,39 +1,27 @@
 #include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
 #include<unistd.h>
+#include<signal.h>
+# include <readline/readline.h>
+# include <readline/history.h> 
 
-int	n_opt_check(char *str)
+void	handler(int sig)
 {
-	int	i;
-
-	i = 0;
-	if (str[i] && str[i] == '-' && str[i+1] == 'n')
-	{
-		while (str[++i] == 'n');
-		if (str[i] != '\0')
-			return (0);
-		return (1);
-	}
-	return (0);
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 }
 
-int	ft_echo(char **argv)
+int main()
 {
-	int		i;
-	char	*new_line;
+	char *s;
 
-	i = 0;
-	new_line = "\n";
-	while (argv[i])
+	signal(SIGINT, handler);
+	while (1)
 	{
-		if (n_opt_check(argv[i]))
-			new_line = "";
-		else
-		{
-			printf("%s",argv[i]);
-			if (argv[i + 1])
-				printf(" ");
-		}
-        i++;
+		s = readline(">");
+		printf("%s\n",s);
 	}
-    printf("%s",new_line);
 }
