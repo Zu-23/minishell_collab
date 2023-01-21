@@ -6,22 +6,23 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h> 
-# include <linux/limits.h>
 # include <signal.h>
 typedef enum types
 {
-	WORD,
-	NULL_TERM,
-	PIPE,
-	W_SPACE,
-	ENV,
-	GREAT,
-	LESS,
-	DLESS,
-	DGREAT,
-	REDIR_ARG,
-	COMMAND,
-}t_types;
+	EOF = (0 << 0),
+	NEWLINE = (1 << 0),
+	PIPE = (1 << 1),
+	DLESS = (1 << 2),
+	DGREAT = (1 << 3),
+	LESS = (1 << 4),
+	GREAT = (1 << 5),
+	DQUOTE = (1 << 6),
+	SQUOTE = (1 << 7),
+	WSPACE = (1 << 8),
+	HASDOLLAR = (1 << 9),
+	WORD = (1 << 10),
+	STRING = (WORD | DQUOTE | SQOUTE | HASDOLLAR),
+}	t_types;
 
 typedef enum states
 {

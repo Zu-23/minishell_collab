@@ -7,8 +7,7 @@ int ft_isspace(char *str)
 
     while (str[i])
 	{
-		if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
-		|| str[i] == '\f' || str[i] == '\v' || str[i] == '\r')
+		if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
 			flag = 1;
 		else
 		{
