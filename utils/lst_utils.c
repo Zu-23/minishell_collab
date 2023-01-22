@@ -9,18 +9,18 @@ t_types	check_type(char *str)
 	{
 		if (str[i] == '|')
 			return (PIPE);
-		else if (str[i] == '<')
-			return (LESS);
-		else if (str[i] == '>')
-			return (GREAT);
 		else if (str[i] == '>' && str[i + 1] == '>')
 			return (DGREAT);
 		else if (str[i] == '<' && str[i + 1] == '<')
 			return (DLESS);
+		else if (str[i] == '<')
+			return (LESS);
+		else if (str[i] == '>')
+			return (GREAT);
 		else if (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
-			return (W_SPACE);
+			return (WSPACE);
 		else if (str[i] == '$')
-			return (ENV);
+			return (HASDOLLAR);
 		i++;
 	}
 	return (WORD);
@@ -31,7 +31,7 @@ t_cmd	*lst_init(t_cmd *cmd, char *token)
 	if (cmd == NULL)
 	{
 		cmd = malloc(sizeof(t_cmd));
-		cmd->command = ft_strdup(token);
+		cmd->command = token;
 		cmd->type = check_type(token);
 		cmd->state = check_state(token);
 		cmd->next = NULL;

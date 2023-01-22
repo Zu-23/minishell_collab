@@ -83,20 +83,15 @@ int	pipe_syntax_err(t_cmd *cmd)
 	return (0);
 }
 
-t_cmd	*doubly_lst_delte(t_cmd *cmd)
+void doubly_lst_delete(t_cmd **cmd)
 {
-	t_cmd *tmp;
-
-	tmp = cmd;
-	if (!tmp->next && tmp->prev)
-		tmp->prev->next = NULL;
-	else if (tmp->prev && tmp->next)
-	{
-		tmp->prev->next = tmp->next;
-		tmp->next->prev = tmp->prev;
-	}
-	free(tmp);
-	return (cmd);
+	if ((*cmd)->prev)
+		(*cmd)->prev->next = (*cmd)->next;
+	else if ((*cmd)->next)
+		(*cmd)->next->prev = (*cmd)->prev;
+	else
+		*cmd = NULL;
+	free(*cmd);
 }
 
 int	redirect_syntax_err(t_cmd *cmd)

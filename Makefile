@@ -13,7 +13,7 @@ utils/ast.c \
 main.c \
 
 OBJ= $(SRC:.c=.o)
-CFLAGS = gcc -Wall -Werror -Wextra -g
+CFLAGS = gcc -g
 RLF= -lreadline
 RM = rm -f
 AR = ar rcs

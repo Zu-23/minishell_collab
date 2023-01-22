@@ -7,21 +7,28 @@
 # include <readline/readline.h>
 # include <readline/history.h> 
 # include <signal.h>
+
+static const char *g_tkns[3] = 
+{
+	" ><|\'\"",
+	"\'",
+	"\""
+};
+
 typedef enum types
 {
-	EOF = (0 << 0),
-	NEWLINE = (1 << 0),
-	PIPE = (1 << 1),
-	DLESS = (1 << 2),
-	DGREAT = (1 << 3),
-	LESS = (1 << 4),
-	GREAT = (1 << 5),
+	PIPE = (1 << 0),
+	DLESS = (1 << 1),
+	DGREAT = (1 << 2),
+	LESS = (1 << 3),
+	GREAT = (1 << 4),
+	WSPACE = (1 << 5),
 	DQUOTE = (1 << 6),
 	SQUOTE = (1 << 7),
-	WSPACE = (1 << 8),
-	HASDOLLAR = (1 << 9),
-	WORD = (1 << 10),
-	STRING = (WORD | DQUOTE | SQOUTE | HASDOLLAR),
+	HASDOLLAR = (1 << 8),
+	WORD = (1 << 9),
+	STRING = (WORD | DQUOTE | SQUOTE | HASDOLLAR),
+	REDIR = (DLESS | DGREAT | LESS |  GREAT)
 }	t_types;
 
 typedef enum states
@@ -73,6 +80,43 @@ typedef struct cmd
 	struct cmd		*next;
 	struct cmd		*prev;
 }t_cmd;
+
+// /* A structure which represents a <word_list>. */
+// typedef struct s_word_lst
+// {
+// 	int		flags;
+// 	char	*word;
+// 	struct s_word_lst *next;
+// }	t_word_lst;
+
+// /* A linked list describing a redirection_list . */
+// typedef struct s_redir
+// {
+// 	t_uint8			op;
+// 	t_word_lst		opd;
+// 	struct s_redir	*next;
+// }	t_redir;
+
+// /* A linked list of commands. */
+// typedef struct s_cmd
+// {
+// 	int				flags;
+// 	t_uint			hdoc;
+// 	pid_t			pid;
+// 	t_word_lst		*words;
+// 	t_redir			*rdr_lst;
+// 	struct s_cmd	*next;
+// }	t_cmd;
+
+// /* The structure used internally to represent pipeline */
+// typedef struct s_pipeline
+// {
+// 	t_uint	ncmd;
+// 	int		prev;
+// 	int		fd[2];
+// 	pid_t	*lastpid;
+// 	t_cmd	*cmd;
+// }	t_pipeline;
 
 void	expansion(t_cmd *cmd, t_env_struct *env);
 void	ft_perror(char *str);

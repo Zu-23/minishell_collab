@@ -11,37 +11,6 @@ t_cmd	*lexer(char *token, t_cmd *cmd)
 	return (cmd);
 }
 
-t_env_struct *get_env(char **env)
-{
-	int i;
-	int	j;
-    char ***splitted_2d_env;
-    t_env_struct *env_var;
-
-	i = 0;
-	j = 0;
-    while (env[i])
-        i++;
-    env_var = malloc(sizeof(t_env_struct) * i);
-    splitted_2d_env = malloc(sizeof(char **) * (i + 1));
-    i = -1;
-    while (env[i])
-        splitted_2d_env[i] = ft_split(env[i], '=');
-    splitted_2d_env[i] = NULL;
-    while (splitted_2d_env[j])
-    {
-		i = 0;
-        while (splitted_2d_env[j][i])
-        {
-            env_var[j].var = ft_strdup(splitted_2d_env[j][i++]);
-            env_var[j].value = ft_strdup(splitted_2d_env[j][i++]);
-        }
-        j++;
-    }
-	free(splitted_2d_env);
-	return (env_var);
-}
-
 int	check_input(char *input)
 {
 	int	i;
@@ -64,12 +33,10 @@ int main(int ac, char **av, char **env)
 	char		*input;
 	char		*token;
 	t_cmd		*cmd;
-	char		**env_stock;
+
+	int tkn = 0;
 
 	cmd = NULL;
-	(void)ac;
-	(void)av;
-	env_stock = get_env(env);
 	while (1)
 	{
 		input = readline("$>");
@@ -79,16 +46,20 @@ int main(int ac, char **av, char **env)
 			continue ;
 		if (ft_strlen(input) > 0)
 			add_history(input);
-		token = ft_strtok(input, " \'\"$><&\\|");
+		token = ft_strtok(input, g_tkns[tkn]);
 		while (token)
 		{
-			cmd = lexer(token, cmd);
-			free(token);
-			token = ft_strtok(NULL, " \'\"$><&\\|");
+			cmd = lexer(token, cmd); // return the last added token
+			tkn = (cmd->type == DQUOTE) + (cmd->type == SQUOTE) * 2;
+			token = ft_strtok(NULL, g_tkns[tkn]);
 		}
 		cmd = lexer_analyzer(cmd);
 		cmd = lst_delete(cmd);
 	}
-	cleaner(env_stock);
 }
 
+// " ' | 
+
+// " |
+
+//"hello wolrd" | > hello

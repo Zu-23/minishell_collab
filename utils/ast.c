@@ -156,19 +156,10 @@ t_cmd *expander(t_cmd *cmd)// here we create the linked list without spaces
 	tmp = cmd;
 	while (tmp)
 	{
-		if ((!ft_strcmp(tmp->command, " ") && tmp->state == GENERAL)
-		|| !ft_strcmp(tmp->command, "\"") || !ft_strcmp(tmp->command, "\'"))
-		{
-			if (!tmp->prev && tmp->next)
-			{
-				cmd = tmp->next;
-				tmp->next->prev = NULL;
-			}
-			else
-				doubly_lst_delte(cmd);
-			tmp = cmd;
+		if (cmd->type & (DQUOTE | SQUOTE))
+			doubly_lst_delte(&cmd);
 		}
-		else
+		else if (cmd)
 			tmp = tmp->next;
 	}
 	expansion(cmd);
