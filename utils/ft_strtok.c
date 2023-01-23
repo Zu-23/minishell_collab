@@ -1,5 +1,10 @@
-#include "../shell_header.h"
+//#include "../shell_header.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+char	*ft_strdup(const char *s1);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 
 char	*skip_spaces(char *str)
@@ -25,26 +30,31 @@ char	*get_token(char *str, char *tkn)
 		str = skip_spaces(str);
 	}
 	else
-		tkn[0] = *str;
+		tkn[0] = *str++;
 	return (str);
 }
-//hello\0
-char	*ft_strtok(char *str, char *delim, int quoted)
+
+char	*ft_strtok(char *str, const char *delim)
 {
 	char		tkn[3];
-	static char	*loc = NULL;
+	int			i;
+	static char	*loc;
 
-	if (!str)
-		str = loc;
-	if (!str || !str[0])
+	if (!str && !loc[0])
 		return (NULL);
-	while (str[i])
-	{
-		if (strchr(delim, str[i]))
-		{
-			loc = get_token(loc, tkn);
-		}
-	}
-	loc = NULL;
-	return (ft_strdup(str));
+	else if (!str)
+		str = loc;
+	else
+		loc = str;
+	i = 0;
+	if (strchr(delim, str[i]))
+		loc = get_token(&str[i], tkn);
+	else
+		while (strchr(delim, str[i]) == NULL)
+			i++;
+	if (i == 0)
+		return (ft_strdup(tkn));
+	loc += i;
+	return (ft_substr(str, 0, i));
 }
+

@@ -33,17 +33,6 @@ int	quote_syntax_err(t_cmd *cmd)
 }
 
 //delete later
-int	unsupport_syntax_err(t_cmd *cmd)
-{
-	if (!ft_strcmp(cmd->command, ";")
-		|| !ft_strcmp(cmd->command, "\\")
-		|| !ft_strcmp(cmd->command, "&"))
-		{
-			printf("%s ",cmd->command);
-			return (err("Unsupported token\n"));
-		}
-	return (0);			
-}
 
 int	pipe_wspace(t_cmd *cmd)
 {
@@ -52,13 +41,13 @@ int	pipe_wspace(t_cmd *cmd)
 
 	tmp = cmd;
 	tmp2 = cmd;
-	if (tmp->prev->type == W_SPACE || tmp2->next->type == W_SPACE)
+	if (tmp->prev->type == WSPACE || tmp2->next->type == WSPACE)
 	{
 		tmp = tmp->prev;
 		tmp2 = tmp2->next;
-		while (tmp && tmp->type == W_SPACE)
+		while (tmp && tmp->type == WSPACE)
 			tmp = tmp->prev;
-		while (tmp2 && tmp2->type == W_SPACE)
+		while (tmp2 && tmp2->type == WSPACE)
 			tmp2 = tmp2->next;
 		if (!tmp || !tmp2)
 			return (1);
@@ -73,13 +62,13 @@ int	pipe_wspace(t_cmd *cmd)
 
 int	pipe_syntax_err(t_cmd *cmd)
 {
-		if (!ft_strcmp(cmd->command, "|"))
-		{
-			if (cmd->prev == NULL || cmd->next == NULL)
-				return (err("parse error near | 1\n"));
-			// else if (pipe_wspace(cmd))
-			// 	return (err("parse error near | 2\n"));
-		}
+	if (!ft_strcmp(cmd->command, "|"))
+	{
+		if (cmd->prev == NULL || cmd->next == NULL)
+			return (err("parse error near | 1\n"));
+		// else if (pipe_wspace(cmd))
+		// 	return (err("parse error near | 2\n"));
+	}
 	return (0);
 }
 
@@ -102,26 +91,32 @@ int	redirect_syntax_err(t_cmd *cmd)
 			if (cmd->next == NULL)
 				return (err("parse error\n"));
 			cmd = cmd->next;
-			while (cmd && cmd->type == W_SPACE)
+			while (cmd && cmd->type == WSPACE)
 				cmd = cmd->next;
 			if (!cmd || (cmd->type != WORD))
 				return (err("parse error\n"));
-			else if (cmd->type == WORD)
-				cmd->type = REDIR_ARG;
 		}
 	return (0);
 }
+t_cmd	*lst_first(t_cmd *cmd)
+{
+	while (cmd->prev);
+		cmd = cmd->prev;
+	return (cmd);
+}
+
 t_cmd	*lexer_analyzer(t_cmd *cmd)
 {
 	t_cmd	*tmp;
-
+	//cmd points to the last node
+	//we need to points to the first
+	cmd = lst_first(cmd);//cmd points to head
 	tmp = cmd;
 	while (tmp)
 	{
 		if (tmp->state == GENERAL)
 		{
-			if (redirect_syntax_err(tmp)|| pipe_syntax_err(tmp)
-				|| pipe_syntax_err(tmp))
+			if (redirect_syntax_err(tmp) || pipe_syntax_err(tmp))
 				return (NULL);
 		}
 		if (quote_syntax_err(tmp))

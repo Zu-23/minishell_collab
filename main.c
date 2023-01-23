@@ -1,7 +1,7 @@
 #include "shell_header.h"
 
 
-t_cmd	*lexer(char *token, t_cmd *cmd)
+t_cmd	*tokenizer(char *token, t_cmd *cmd)
 {
 
 	if (cmd == NULL)
@@ -17,9 +17,7 @@ int	check_input(char *input)
 
 	i = 0;
 
-	if (!input[0] || ft_isspace(input))
-		return (1);
-	while (input[i] == '\"' || input[i] == '\'' || input[i] == ' ')
+	while (input[i] == ' ' || input[i] == '\t' || input[i] == '\n')
 		i++;
 	if (input[i] == '\0')
 		return (1);
@@ -33,10 +31,10 @@ int main(int ac, char **av, char **env)
 	char		*input;
 	char		*token;
 	t_cmd		*cmd;
-
-	int tkn = 0;
+	int 		tkn;
 
 	cmd = NULL;
+	tkn = 0;
 	while (1)
 	{
 		input = readline("$>");
@@ -49,7 +47,8 @@ int main(int ac, char **av, char **env)
 		token = ft_strtok(input, g_tkns[tkn]);
 		while (token)
 		{
-			cmd = lexer(token, cmd); // return the last added token
+			printf("token = %s\n", token);
+			cmd = tokenizer(token, cmd); // return the last added token
 			tkn = (cmd->type == DQUOTE) + (cmd->type == SQUOTE) * 2;
 			token = ft_strtok(NULL, g_tkns[tkn]);
 		}
@@ -57,9 +56,3 @@ int main(int ac, char **av, char **env)
 		cmd = lst_delete(cmd);
 	}
 }
-
-// " ' | 
-
-// " |
-
-//"hello wolrd" | > hello

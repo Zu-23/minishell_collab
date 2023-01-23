@@ -60,7 +60,7 @@ t_cmd	*lst_add(t_cmd *cmd, char *token)
 	else
 	{
 		tmp = malloc(sizeof(t_cmd));
-		tmp->command = ft_strdup(token);
+		tmp->command = token;
 		tmp->type = check_type(token);
 		tmp->state = check_state(token);
 		last = lst_last(cmd);
@@ -68,5 +68,5 @@ t_cmd	*lst_add(t_cmd *cmd, char *token)
 		tmp->prev = last;
 		tmp->next = NULL;
 	}
-	return (cmd);
+	return (tmp);
 }
