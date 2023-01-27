@@ -32,3 +32,36 @@ cat | dfds ???
 
 /* Make sure that the pipes are closed in the parent. */
 close_pipes (pipe_in, pipe_out);
+
+add impt vars
+?
+PWD (EXPORTED | ASSIGNED)
+OLDPWD (EXPORTED)
+PATH (0)
+SHLVL adjust it and add it (EXPORTED | ASSIGNED)
+
+error :
+fatal errors exit code = 2
+internal errors 
+
+/* Make sure filenames are displayed using printable characters */
+pathname = printable_filename (pathname, 0);
+internal_error (_("%s: command not found"), pathname);
+exit (EX_NOTFOUND);	/* Posix.2 says the exit status is 127 */
+
+
+what about this ./minishell < in or ./minishell > out or both
+
+read heredoc with readline
+
+check out Alternate Interface Example in the readline documentation
+
+/* Return 1 if STRING is an absolute program name; it is absolute if it
+   contains any slashes.  This is used to decide whether or not to look
+   up through $PATH. */
+int
+absolute_program (string)
+     const char *string;
+{
+  return ((char *)mbschr (string, '/') != (char *)NULL);
+}

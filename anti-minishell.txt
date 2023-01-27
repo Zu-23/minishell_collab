@@ -1,0 +1,18 @@
+$chmood 000 4
+$> > 4 > 1 > 2 >  3 << . cat -e > 4 | cat -e  | >> 5 > 6 >> 7 cat -e << .. | sleep 5
+> sad
+> d.
+> .
+> saddas
+> ..
+
+/////
+$> > 1 > 2 > 3 << . cat -e > 4 | cat -e  | >> 5 > 6 >> 7 cat -e << .. | sleep 5
+
+$> << . cat > 1 | cat > 2 << ..|cat 1 2
+> abcd
+> .
+> 1234
+> ..
+abcd
+1234

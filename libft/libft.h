@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eelhasni <eelhasni@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/15 21:07:23 by eelhasni          #+#    #+#             */
+/*   Updated: 2023/01/17 18:31:56 by eelhasni         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LIBFT_H
 # define LIBFT_H
 
@@ -8,10 +20,10 @@
 ** Macros :
 */
 
+# define FT_ERR		-1
+# define FT_SUCC	0
 # define FT_TRUE	1
 # define FT_FALSE	0
-# define FT_FAIL	-1
-# define FT_SUCC	0
 # define FT_INT_MAX 2147483647
 # define FT_INT_MIN -2147483648
 
@@ -22,19 +34,10 @@
 typedef unsigned char		t_bool;
 typedef unsigned int		t_uint;
 typedef unsigned char		t_uchar;
-typedef unsigned char		t_uint8_t;
-typedef unsigned short int	t_uint16_t;
-typedef unsigned int		t_uint32_t;
-typedef unsigned long int	t_uint64_t;
-
-/* Singly Linked List */
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}		t_list;
-
-/* Doubly Linked List*/
+typedef unsigned char		t_uint8;
+typedef unsigned short int	t_uint16;
+typedef unsigned int		t_uint32;
+typedef unsigned long int	t_uint64;
 
 /*
 ** String operations	:
@@ -49,6 +52,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_strjoin(char const *s1, char const *s2);
+int		ft_strcmp(const char *s1, const char *s2);
 char	**ft_split(char const *s, char c);
 char	*ft_strrchr(const char *s, int c);
 char	*ft_strchr(const char *s, int c);
@@ -99,20 +103,5 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putchar_fd(char c, int fd);
 void	ft_putendl_fd(char *s, int fd);
 
-/*
-** Lists operations	:
-*/
-
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-void	ft_lstclear(t_list **lst, void (*del)(void *));
-void	ft_lstdelone(t_list *lst, void (*del)(void *));
-void	ft_lstiter(t_list *lst, void (*f)(void *));
-void	ft_lstadd_front(t_list **lst, t_list *new);
-void	ft_lstadd_back(t_list **lst, t_list *new);
-t_list	*ft_lstnew(void *content);
-t_list	*ft_lstlast(t_list *lst);
-int		ft_lstsize(t_list *lst);
-
-// Extra Functions	:
 
 #endif

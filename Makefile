@@ -4,7 +4,7 @@
 NAME		:=	minishell
 
 #Compilation :
-CC			:=	cc
+CC			:=	cc 
 CFLAGS		:=	-g -O2
 
 # Utils :
@@ -14,27 +14,36 @@ RM			:=	rm -f
 INC_DIR		:=	inc/
 PARS_DIR	=	$(SRC_DIR)parsing/
 EXEC_DIR	=	$(SRC_DIR)executing/
+BLTN_DIR	=	$(SRC_DIR)builtins/
+MISC_DIR	=	$(SRC_DIR)misc/
 SRC_DIR		:=	src/
 LIBFT_DIR	:=	libft/
 
 #Includes :
-INCLUDES	:=	minishell.h parser.h exec_cmd.h
+INCLUDES	:=	minishell.h parser.h execute.h
 CINCPATH	:=	-I$(LIBFT_DIR) -I$(INC_DIR)
 
 #Source Files :
 PARS_SRC	:=	
-EXEC_SRC	:= 	exec_cmd.c
-SRC			:=	main.c minishell.c
+EXEC_SRC	:= 	execute.c
+BLTN_SRC	:=	export.c unset.c env.c 
+MISC_SRC	:=	variables.c \
+				utils.c env_utils.c var_utils.c 
+SRC			:=	main.c minishell.c init.c setup.c
 SRC			:=	$(addprefix $(SRC_DIR), $(SRC)) \
 				$(addprefix $(PARS_DIR), $(PARS_SRC)) \
-				$(addprefix $(EXEC_DIR), $(EXEC_SRC))
+				$(addprefix $(EXEC_DIR), $(EXEC_SRC)) \
+				$(addprefix $(BLTN_DIR), $(BLTN_SRC)) \
+				$(addprefix $(MISC_DIR), $(MISC_SRC))
+
 
 #Object Files :
-OBJ			:= 	$(SRC:.c=.o)
+OBJ			:=	$(SRC:.c=.o)
 
 #Libraries :
-LIBS		:=   -lft -lreadline
-LIBSPATH	:=   -L$(LIBFT_DIR)
+LIBFT		:=	$(LIBFT_DIR)/libft.a
+LINKLIBS	:=	-lft -lreadline
+LIBSPATH	:=	-L$(LIBFT_DIR)
 
 
 ####            Rules            #####
@@ -45,10 +54,10 @@ libft	:
 
 all			:	$(NAME)
 
-$(NAME)		:	$(OBJ)
+$(NAME)		:	$(OBJ) $(LIBFT)
 		@echo
 		@echo "$(RED)Linking...$(DEFAULT)"
-		$(CC) $^ -o $(NAME) -Llibft $(LIBS)
+		$(CC) $^ -o $(NAME) $(LIBSPATH) $(LINKLIBS)
 		@echo
 		@echo "$(LGREEN)$(NAME) has been created ! :)$(DEFAULT)"
 		@echo
